@@ -1,0 +1,39 @@
+# Node.js
+node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency directories
+lib/
+vendor/
+
+# Environment variables
+.env
+
+# IDE settings
+.vscode/
+.idea/
+
+# Compiled binary addons (usually binary modules like node-sass)
+build/Release/
+
+# Editor-specific files
+*.swp
+*.swo
+*.swn
+
+# Mac OS
+.DS_Store
+
+# Windows
+Thumbs.db
+desktop.ini

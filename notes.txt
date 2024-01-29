@@ -1,0 +1,24 @@
+npm install express cors jsonwebtoken sequelize mysql2
+
+/project-root
+    /src
+        /controllers
+        /models
+        /routes
+        /middlewares
+    /config
+    server.js
+    .env
+
+Skema DB:
+    Tabel users
+        `email` varchar(225),
+        `password` varchar(225),
+        `first_name` varchar(225),
+        `last_name` varchar(225),
+        `phone` varchar(20),
+        `registered_date` varchar(225), (Auto Default)
+        `last_login` varchar(225),
+        `ip_address` varchar(225),
+
+    Tabel xx
