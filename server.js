@@ -5,7 +5,8 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 
 // Import modules
-import router from './src/routes/AuthRoutes.js';
+import AuthRoutes from './src/routes/AuthRoutes.js';
+import AccountRoutes from './src/routes/AccountRoutes.js';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -14,16 +15,12 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(cors()); // Enable CORS for all routes
-app.use(bodyParser.json()); // Parse incoming JSON requests
+app.use(cors());
+app.use(bodyParser.json());
 
 // Define routes
-app.use('/api/auth', router);
-
-// Index default
-// app.use('/api', (req, res) => {
-// 	res.status(200).json({ status: 'success', message: 'OK' });
-// });
+app.use('/api/auth', AuthRoutes);
+app.use('/api/account', AccountRoutes);
 
 // Handle unknown routes
 app.use((req, res) => {

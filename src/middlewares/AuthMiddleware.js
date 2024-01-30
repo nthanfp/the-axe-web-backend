@@ -1,5 +1,8 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/UserModel.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 // Middleware untuk verifikasi token JWT
 async function authenticateToken(req, res, next) {
@@ -10,19 +13,24 @@ async function authenticateToken(req, res, next) {
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const cleanedToken = token.replace(/^Bearer\s/, '');
+        const decoded = jwt.verify(cleanedToken, process.env.JWT_SECRET);
+
+        console.log('Decoded token:', decoded);
+        console.log('UUID: ', decoded.userId);
+
         req.userId = decoded.userId;
 
         // Cek apakah user masih ada di database
         const user = await User.findByPk(decoded.userId);
         if (!user) {
-            return res.status(401).json({ status: 'error', message: 'Unauthorized - Invalid token' });
+            return res.status(401).json({ status: 'error', message: 'Unauthorized - Invalid token (1)' });
         }
 
         next();
     } catch (error) {
         console.error('Error verifying token:', error);
-        res.status(401).json({ status: 'error', message: 'Unauthorized - Invalid token', error });
+        res.status(401).json({ status: 'error', message: 'Unauthorized - Invalid token (2)', error });
     }
 }
 
