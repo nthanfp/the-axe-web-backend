@@ -93,7 +93,7 @@ async function login(req, res) {
         }
 
         // Buat token JWT
-        const token = jwt.sign({ userId: user.uuid }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ userId: user.uuid }, process.env.JWT_SECRET, { expiresIn: '24h' });
 
         // Perbarui ip_address dan last_login
         const updatedUser = await user.update({
@@ -104,7 +104,10 @@ async function login(req, res) {
         res.status(200).json({
             status: 'success',
             message: 'Login successful',
-            data: { token }, // Mengembalikan informasi pengguna setelah pembaruan
+            data: {
+                token,
+                user: updatedUser
+            },
         });
     } catch (error) {
         console.error('Error logging in:', error);

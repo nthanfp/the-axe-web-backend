@@ -30,6 +30,7 @@ const User = db.define('users', {
     },
     first_name: {
         type: DataTypes.STRING,
+        allowNull: false,
         validate: {
             len: {
                 args: [1, 255],
@@ -39,6 +40,7 @@ const User = db.define('users', {
     },
     last_name: {
         type: DataTypes.STRING,
+        allowNull: false,
         validate: {
             len: {
                 args: [1, 255],
@@ -48,6 +50,7 @@ const User = db.define('users', {
     },
     phone: {
         type: DataTypes.STRING,
+        allowNull: false,
         validate: {
             is: {
                 args: /^[0-9]+$/,
@@ -55,15 +58,28 @@ const User = db.define('users', {
             },
         },
     },
-    registered_date: {
-        type: DataTypes.DATE,
-        defaultValue: db.literal('CURRENT_TIMESTAMP'),
+    role: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: 'MEMBER',
+        validate: {
+            isIn: {
+                args: [['MEMBER', 'ADMIN']],
+                msg: 'Invalid role',
+            },
+        },
+    },
+    api_key: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
     last_login: {
         type: DataTypes.DATE,
+        allowNull: true,
     },
     ip_address: {
         type: DataTypes.STRING,
+        allowNull: true,
         validate: {
             isIP: {
                 msg: 'Invalid IP address format',
