@@ -175,4 +175,4 @@ async function updateApiKey(req, res) {
 
 
 
-export { profile, updateProfile, changePassword };
+export { profile, updateProfile, changePassword, updateApiKey };

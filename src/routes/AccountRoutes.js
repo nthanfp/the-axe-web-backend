@@ -1,7 +1,7 @@
 import express from 'express';
 
 import { authenticateToken } from '../middlewares/AuthMiddleware.js';
-import { changePassword, profile, updateProfile } from '../controllers/AccountController.js';
+import { changePassword, profile, updateApiKey, updateProfile } from '../controllers/AccountController.js';
 
 const AccountRoutes = express.Router();
 
@@ -9,5 +9,6 @@ const AccountRoutes = express.Router();
 AccountRoutes.get('/profile', authenticateToken, profile);
 AccountRoutes.post('/profile', authenticateToken, updateProfile);
 AccountRoutes.post('/change-password', authenticateToken, changePassword);
+AccountRoutes.post('/update-api-key', authenticateToken, updateApiKey);
 
 export default AccountRoutes;
