@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import validator from 'validator';
+import { randomBytes } from 'crypto';
 
 import User from '../models/UserModel.js';
 
@@ -136,6 +136,43 @@ async function changePassword(req, res) {
         res.status(500).json({ status: 'error', message: 'Internal Server Error' });
     }
 }
+
+async function updateApiKey(req, res) {
+    try {
+        const userId = req.userId;
+
+        // Cari user berdasarkan ID
+        const user = await User.findByPk(userId);
+
+        if (user) {
+            // Generate random API key
+            const apiKey = randomBytes(16).toString('hex');
+
+            // Update API key
+            user.api_key = apiKey;
+
+            // Simpan perubahan
+            await user.save();
+
+            res.status(200).json({
+                status: 'success',
+                message: 'API key updated successfully',
+                data: {
+                    uuid: user.uuid,
+                    api_key: user.api_key,
+                    createdAt: user.createdAt,
+                    updatedAt: user.updatedAt
+                },
+            });
+        } else {
+            res.status(404).json({ status: 'error', message: 'User not found' });
+        }
+    } catch (error) {
+        console.error('Error updating API key:', error);
+        res.status(500).json({ status: 'error', message: 'Internal Server Error' });
+    }
+}
+
 
 
 export { profile, updateProfile, changePassword };

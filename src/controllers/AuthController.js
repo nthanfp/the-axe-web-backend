@@ -93,7 +93,12 @@ async function login(req, res) {
         }
 
         // Buat token JWT
-        const token = jwt.sign({ userId: user.uuid }, process.env.JWT_SECRET, { expiresIn: '24h' });
+        const token = jwt.sign({
+            userId: user.uuid,
+            uuid: user.uuid,
+            email: user.email,
+            role: user.role,
+        }, process.env.JWT_SECRET, { expiresIn: '240h' });
 
         // Perbarui ip_address dan last_login
         const updatedUser = await user.update({
@@ -106,7 +111,18 @@ async function login(req, res) {
             message: 'Login successful',
             data: {
                 token,
-                user: updatedUser
+                user: {
+                    uuid: updatedUser.uuid,
+                    email: updatedUser.email,
+                    first_name: updatedUser.first_name,
+                    last_name: updatedUser.last_name,
+                    phone: updatedUser.phone,
+                    role: updatedUser.role,
+                    last_login: updatedUser.last_login,
+                    ip_address: updatedUser.ip_address,
+                    created_at: updatedUser.createdAt,
+                    updated_at: updatedUser.updatedAt
+                }
             },
         });
     } catch (error) {
@@ -133,10 +149,11 @@ async function profile(req, res) {
                     first_name: user.first_name,
                     last_name: user.last_name,
                     phone: user.phone,
+                    role: user.role,
                     last_login: user.last_login,
                     ip_address: user.ip_address,
-                    createdAt: user.createdAt,
-                    updatedAt: user.updatedAt
+                    created_at: user.created_at,
+                    updated_at: user.updated_at
                 },
             });
         } else {
