@@ -18,9 +18,10 @@ async function profile(req, res) {
                 data: {
                     uuid: user.uuid,
                     email: user.email,
+                    phone: user.phone,
                     first_name: user.first_name,
                     last_name: user.last_name,
-                    phone: user.phone,
+                    api_key: user.api_key,
                     last_login: user.last_login,
                     ip_address: user.ip_address,
                     createdAt: user.createdAt,
