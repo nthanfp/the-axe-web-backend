@@ -1,9 +1,18 @@
+import validator from 'validator';
+
 import User from '../models/UserModel.js';
 
-// Controller untuk membuat user baru
 async function createUser(req, res) {
     try {
         const { email, password, first_name, last_name, phone, ip_address } = req.body;
+
+        // Cek apakah email sudah terdaftar
+        const existingUser = await User.findOne({ where: { email } });
+        if (existingUser) {
+            return res.status(400).json({ status: 'error', message: 'Email is already registered' });
+        }
+
+        // Buat pengguna baru jika email belum terdaftar
         const newUser = await User.create({
             email,
             password,
@@ -20,7 +29,7 @@ async function createUser(req, res) {
         });
     } catch (error) {
         console.error('Error creating user:', error);
-        res.status(500).json({ status: 'error', message: 'Internal Server Error' });
+        res.status(500).json({ status: 'error', message: `Internal Server Error - ${error}` });
     }
 }
 
@@ -117,4 +126,61 @@ async function deleteUserById(req, res) {
     }
 }
 
-export { createUser, getAllUsers, getUserById, updateUserById, deleteUserById };
+async function validateUserInput(req, res, next) {
+    const { email, password, first_name, last_name, phone, ip_address } = req.body;
+
+    // Periksa apakah properti email tersedia dalam req.body
+    if (!email) {
+        return res.status(400).json({ status: 'error', message: 'Email is required' });
+    }
+
+    // Validasi email
+    if (!validator.isEmail(email)) {
+        return res.status(400).json({ status: 'error', message: 'Invalid email format' });
+    }
+
+    // Periksa apakah properti password tersedia dalam req.body
+    if (!password) {
+        return res.status(400).json({ status: 'error', message: 'Password is required' });
+    }
+
+    // Validasi password
+    if (!validator.isLength(password, { min: 6 })) {
+        return res.status(400).json({ status: 'error', message: 'Password should be at least 6 characters long' });
+    }
+
+    // Periksa apakah properti first_name tersedia dalam req.body
+    if (!first_name) {
+        return res.status(400).json({ status: 'error', message: 'First name is required' });
+    }
+
+    // Validasi nama depan
+    if (!validator.isLength(first_name, { min: 1 })) {
+        return res.status(400).json({ status: 'error', message: 'First name should not be empty' });
+    }
+
+    // Periksa apakah properti last_name tersedia dalam req.body
+    if (!last_name) {
+        return res.status(400).json({ status: 'error', message: 'Last name is required' });
+    }
+
+    // Validasi nama belakang
+    if (!validator.isLength(last_name, { min: 1 })) {
+        return res.status(400).json({ status: 'error', message: 'Last name should not be empty' });
+    }
+
+    // Periksa apakah properti phone tersedia dalam req.body
+    if (!phone) {
+        return res.status(400).json({ status: 'error', message: 'Phone number is required' });
+    }
+
+    // Validasi nomor telepon
+    if (!validator.isNumeric(phone)) {
+        return res.status(400).json({ status: 'error', message: 'Phone must contain only numbers' });
+    }
+
+    next(); // Lanjutkan jika semua properti tersedia dan valid
+}
+
+
+export { validateUserInput, createUser, getAllUsers, getUserById, updateUserById, deleteUserById };

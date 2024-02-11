@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 // Import modules
 import AuthRoutes from './src/routes/AuthRoutes.js';
 import AccountRoutes from './src/routes/AccountRoutes.js';
+import AdminRoutes from './src/routes/AdminRoutes.js';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -21,6 +22,7 @@ app.use(bodyParser.json());
 // Define routes
 app.use('/api/auth', AuthRoutes);
 app.use('/api/account', AccountRoutes);
+app.use('/api/admin', AdminRoutes);
 
 // Handle unknown routes
 app.use((req, res) => {
