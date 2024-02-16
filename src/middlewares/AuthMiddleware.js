@@ -16,8 +16,8 @@ async function authenticateToken(req, res, next) {
         const cleanedToken = token.replace(/^Bearer\s/, '');
         const decoded = jwt.verify(cleanedToken, process.env.JWT_SECRET);
 
-        console.log('Decoded token:', decoded);
-        console.log('UUID: ', decoded.userId);
+        // console.log('Decoded token:', decoded);
+        // console.log('UUID: ', decoded.userId);
 
         req.userId = decoded.userId;
 
