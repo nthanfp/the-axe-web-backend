@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
+import morgan from 'morgan';
 
 // Import modules
 import AuthRoutes from './src/routes/AuthRoutes.js';
@@ -18,6 +19,7 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
+app.use(morgan('combined'));
 
 // Define routes
 app.use('/api/auth', AuthRoutes);
