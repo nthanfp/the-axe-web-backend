@@ -11,6 +11,7 @@ import multer from 'multer';
 import AuthRoutes from './src/routes/AuthRoutes.js';
 import AccountRoutes from './src/routes/AccountRoutes.js';
 import AdminRoutes from './src/routes/AdminRoutes.js';
+import UploadRoutes from './src/routes/UploadFileRoutes.js';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -26,29 +27,10 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(morgan('combined'));
 
-// Multer Configuration
-const storage = multer.diskStorage({
-	destination: (req, file, cb) => {
-		cb(null, 'public/uploads/');
-	},
-	filename: (req, file, cb) => {
-		cb(null, Date.now() + '-' + file.originalname);
-	},
-});
-
-const upload = multer({ storage });
-
-// File Upload Endpoint
-app.post('/api/upload', upload.single('file'), (req, res) => {
-	if (!req.file) {
-		return res.status(400).json({ error: 'No file uploaded' });
-	}
-	res.json({ message: 'File uploaded successfully', filename: req.file.filename });
-});
-
 // Define routes
 app.use('/api/auth', AuthRoutes);
 app.use('/api/account', AccountRoutes);
+app.use('/api/uploads', UploadRoutes);
 app.use('/api/admin', AdminRoutes);
 
 // Handle unknown routes
