@@ -5,7 +5,6 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
 import moment from 'moment-timezone';
-import multer from 'multer';
 
 // Import modules
 import AuthRoutes from './src/routes/AuthRoutes.js';

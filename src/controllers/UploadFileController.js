@@ -56,6 +56,10 @@ const videoUpload = multer({
 
 // Controller untuk upload gambar
 function uploadImages(req, res) {
+    if (!req.files || req.files.length === 0) {
+        return res.status(400).json({ status: 'error', message: 'No files uploaded' });
+    }
+
     imageUpload.array('images')(req, res, err => {
         if (err instanceof multer.MulterError) {
             return res.status(400).json({ status: 'error', message: err.message });
@@ -74,6 +78,10 @@ function uploadImages(req, res) {
 
 // Controller untuk upload video
 function uploadVideos(req, res) {
+    if (!req.files || req.files.length === 0) {
+        return res.status(400).json({ status: 'error', message: 'No files uploaded' });
+    }
+
     videoUpload.array('videos')(req, res, err => {
         if (err instanceof multer.MulterError) {
             return res.status(400).json({ status: 'error', message: err.message });
