@@ -7,9 +7,9 @@ import morgan from 'morgan';
 import moment from 'moment-timezone';
 
 // Import modules
+import AdminRoutes from './src/routes/AdminRoutes.js';
 import AuthRoutes from './src/routes/AuthRoutes.js';
 import AccountRoutes from './src/routes/AccountRoutes.js';
-import AdminRoutes from './src/routes/AdminRoutes.js';
 import UploadRoutes from './src/routes/UploadFileRoutes.js';
 import ToolRoutes from './src/routes/ToolRoutes.js';
 
