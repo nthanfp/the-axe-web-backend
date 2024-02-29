@@ -11,6 +11,7 @@ import AuthRoutes from './src/routes/AuthRoutes.js';
 import AccountRoutes from './src/routes/AccountRoutes.js';
 import AdminRoutes from './src/routes/AdminRoutes.js';
 import UploadRoutes from './src/routes/UploadFileRoutes.js';
+import ToolRoutes from './src/routes/ToolRoutes.js';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -31,6 +32,7 @@ app.use('/api/auth', AuthRoutes);
 app.use('/api/account', AccountRoutes);
 app.use('/api/uploads', UploadRoutes);
 app.use('/api/admin', AdminRoutes);
+app.use('/api/tools', ToolRoutes);
 
 // Handle unknown routes
 app.use((req, res) => {

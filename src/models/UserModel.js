@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { v4 as uuidv4 } from 'uuid';
+
 import db from '../config/db.js';
 
 const User = db.define('users',
@@ -61,7 +62,7 @@ const User = db.define('users',
         },
         role: {
             type: DataTypes.STRING,
-            allowNull: true,
+            allowNull: false,
             defaultValue: 'MEMBER',
             validate: {
                 isIn: {
