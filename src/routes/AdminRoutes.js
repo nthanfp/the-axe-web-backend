@@ -2,6 +2,7 @@ import express from 'express';
 import { createUser, getAllUsers, getUserById, updateUserById, deleteUserById, validateUserInput } from '../controllers/userController.js';
 import { authenticateToken, checkAdmin } from '../middlewares/AuthMiddleware.js';
 import { createTool, deleteToolById, getAllTools, getToolById, updateToolById } from '../controllers/ToolController.js';
+import { createProject, getAllProjects, getProjectById, updateProjectById, deleteProjectById, upload } from '../controllers/ProjectController.js';
 
 const AdminRoutes = express.Router();
 
@@ -18,5 +19,12 @@ AdminRoutes.get('/tools/', authenticateToken, checkAdmin, getAllTools);
 AdminRoutes.get('/tools/:id', authenticateToken, checkAdmin, getToolById);
 AdminRoutes.put('/tools/:id', authenticateToken, checkAdmin, updateToolById);
 AdminRoutes.delete('/tools/:id', authenticateToken, checkAdmin, deleteToolById);
+
+// Route Projects
+AdminRoutes.post('/projects', authenticateToken, checkAdmin, upload.single('image'), createProject);
+AdminRoutes.get('/projects', authenticateToken, checkAdmin, getAllProjects);
+AdminRoutes.get('/projects/:id', authenticateToken, checkAdmin, getProjectById);
+AdminRoutes.put('/projects/:id', authenticateToken, checkAdmin, upload.single('image'), updateProjectById);
+AdminRoutes.delete('/projects/:id', authenticateToken, checkAdmin, deleteProjectById);
 
 export default AdminRoutes;
