@@ -5,6 +5,8 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
 import moment from 'moment-timezone';
+import { fileURLToPath } from 'url';
+import path, { dirname } from 'path';
 
 // Import modules
 import AdminRoutes from './src/routes/AdminRoutes.js';
@@ -35,6 +37,11 @@ app.use('/api/uploads', UploadRoutes);
 app.use('/api/admin', AdminRoutes);
 app.use('/api/tools', ToolRoutes);
 app.use('/api/projects', ProjectRoutes);
+
+// Serve static files from the "public" directory
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Handle unknown routes
 app.use((req, res) => {
