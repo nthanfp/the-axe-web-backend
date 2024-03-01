@@ -1,4 +1,5 @@
 import validator from 'validator';
+import { Op } from 'sequelize';
 
 import User from '../models/UserModel.js';
 
@@ -45,6 +46,66 @@ async function getAllUsers(req, res) {
         });
     } catch (error) {
         console.error('Error getting users:', error);
+        res.status(500).json({ status: 'error', message: 'Internal Server Error' });
+    }
+}
+
+// get smeua user datatables
+async function getAllUserDatatables(req, res) {
+    try {
+        const { draw, start, length, search, order } = req.query;
+
+        // Periksa apakah order telah didefinisikan dengan benar
+        if (!order || !Array.isArray(order) || order.length === 0) {
+            return res.status(400).json({ status: 'error', message: 'Invalid order parameter' });
+        }
+
+        const { column, dir } = order[0];
+
+        // Query untuk pencarian
+        const whereCondition = search.value ? {
+            [Op.or]: [
+                { email: { [Op.like]: `%${search.value}%` } },
+                { first_name: { [Op.like]: `%${search.value}%` } },
+                { last_name: { [Op.like]: `%${search.value}%` } },
+                { phone: { [Op.like]: `%${search.value}%` } },
+            ]
+        } : {};
+
+        // Jumlah total data tanpa filter
+        const totalRecords = await User.count();
+
+        // Jumlah total data dengan filter pencarian
+        const filteredRecords = await User.count({ where: whereCondition });
+
+        // Query untuk pengurutan dan pembatasan hasil
+        const users = await User.findAll({
+            where: whereCondition,
+            order: [[column, dir]],
+            offset: parseInt(start),
+            limit: parseInt(length)
+        });
+
+        // Format data sesuai dengan spesifikasi DataTables
+        const data = users.map(user => ({
+            uuid: user.uuid,
+            email: user.email,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            phone: user.phone,
+            ip_address: user.ip_address,
+            role: user.role,
+        }));
+
+        // Response ke DataTables
+        res.status(200).json({
+            draw: parseInt(draw),
+            recordsTotal: totalRecords,
+            recordsFiltered: filteredRecords,
+            data: data
+        });
+    } catch (error) {
+        console.error('Error getting users for DataTables:', error);
         res.status(500).json({ status: 'error', message: 'Internal Server Error' });
     }
 }
@@ -183,4 +244,4 @@ async function validateUserInput(req, res, next) {
 }
 
 
-export { validateUserInput, createUser, getAllUsers, getUserById, updateUserById, deleteUserById };
+export { validateUserInput, createUser, getAllUsers, getAllUserDatatables, getUserById, updateUserById, deleteUserById };
